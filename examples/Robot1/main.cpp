@@ -80,6 +80,9 @@ int main(int argc, char** argv)
         u.v() = 1. + std::sin( T(2) * T(M_PI) / T(N) );
         u.dtheta() = std::sin( T(2) * T(M_PI) / T(N) ) * (1 - 2*(i > 50));
         
+        /* ================================
+           下面是对真实系统的模拟 
+           ================================*/
         // Simulate system
         x = sys.f(x, u);
         
@@ -87,12 +90,18 @@ int main(int argc, char** argv)
         x.x() += systemNoise*noise(generator);
         x.y() += systemNoise*noise(generator);
         x.theta() += systemNoise*noise(generator);
-        
+
+
+        /* ================================
+           下面是EKF的两个大的步骤：预测&校正 
+           ================================*/
+        // 第一部分：prediction
         // Predict state for current time-step using the filters
         auto x_pred = predictor.predict(sys, u);
         auto x_ekf = ekf.predict(sys, u);
         auto x_ukf = ukf.predict(sys, u);
         
+        // 第二部分：correction ，下面用了两个EKF，分别对位置和朝向进行估计
         // Orientation measurement
         {
             // We can measure the orientation every 5th step

@@ -68,9 +68,9 @@ namespace Kalman {
         
     protected:
         //! State Estimate
-        using KalmanBase::x;
+        using KalmanBase::x; // 包括先验的和后验的，两者在不同的时刻存在，不冲突
         //! State Covariance Matrix
-        using StandardBase::P;
+        using StandardBase::P; // 先验误差协方差矩阵 & 后验误差协方差矩阵
         
     public:
         /**
