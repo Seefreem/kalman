@@ -95,7 +95,8 @@ int main(int argc, char** argv)
         /* ================================
            下面是EKF的两个大的步骤：预测&校正 
            ================================*/
-        // 第一部分：prediction
+        // 第一部分：prediction，实际上只计算了状态的先验估计和先验估计的协方差
+        // 返回值是先验估计的值
         // Predict state for current time-step using the filters
         auto x_pred = predictor.predict(sys, u);
         auto x_ekf = ekf.predict(sys, u);
